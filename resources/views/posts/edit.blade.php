@@ -1,0 +1,41 @@
+@extends('layouts.app')
+
+@section('title', 'Edit Post')
+
+@section('content')
+    <h1>Edit Post</h1>
+
+   <form action="{{ route('posts.save', $post->id) }}" method="POST">
+    @csrf
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Post Title</label>
+        <input type="text" name="title" id="title" class="form-control"
+               value="{{ old('title', $post->title) }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="content" class="form-label">Content</label>
+        <textarea name="content" id="content" rows="5" class="form-control" required>{{ old('content', $post->content) }}</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="category_id" class="form-label">Category</label>
+        <select name="category_id" id="category_id" class="form-select" required>
+            <option value="">-- Select Category --</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}" 
+                    {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        {{ $post->id ? 'Update Post' : 'Create Post' }}
+    </button>
+    <a href="{{ route('posts.all') }}" class="btn btn-secondary">Cancel</a>
+</form>
+
+@endsection

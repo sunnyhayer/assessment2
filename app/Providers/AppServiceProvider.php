@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use App\Models\Post;
+use App\Models\Category;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +33,9 @@ class AppServiceProvider extends ServiceProvider
             'ip' => request()->ip(),
             'timestamp' => now()->toDateTimeString()
         ]);
+
+
+    Route::model('post', Post::class);
+    Route::model('category', Category::class);
     }
 }

@@ -31,10 +31,10 @@
                         <a class="nav-link" href="/">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Posts</a>
+                        <a class="nav-link" href="{{ route('posts.all') }}">Posts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Categories</a>
+                        <a class="nav-link" href="{{ route('categories.all') }}">Categories</a>
                     </li>
                     <!-- Authentication Links -->
                     @guest
