@@ -12,7 +12,7 @@ I used Composer to initialize the Laravel project.
 composer create-project laravel/laravel assessment2
 ```
 
-Laravel 12 comes with SQLite by default, I needed to switch to MySQL for better compatibility with XAMPP. This required updating both the `.env` file and database configuration:
+I setup mysql databae configurations in .env file:
 
 ```
 DB_CONNECTION=mysql
@@ -48,7 +48,7 @@ The Post migration was more complex because it needed foreign key relationships:
 - is_active (enum: 'Yes', 'No', default 'Yes')
 - timestamps
 
-The important thing was the foreign key constraints and both tables need to use `$table->id()` (which creates BIGINT UNSIGNED) rather than mixing `$table->increments()` with `$table->foreignId()`.
+The trickiest part was ensuring the foreign key constraints worked properly. I learned that in Laravel, you need to use consistent data types - both tables need to use `$table->id()` (which creates BIGINT UNSIGNED) rather than mixing `$table->increments()` with `$table->foreignId()`.
 
 ## Model Configuration
 
@@ -63,6 +63,7 @@ I also set up the model relationships:
 - Post belongs to User  
 - Category has many Posts
 
+These relationships made it much easier to display category names in the post listings and handle the foreign key assignments in the controllers.
 
 ## Factory and Seeder
 
@@ -79,7 +80,7 @@ I also created seeders to populate the database with 5 categories and 10 posts f
 
 ## Authentication and Middleware
 
-I needed to create custom middleware.
+Since only admin users should access these routes, I needed to create custom middleware. In Laravel 12, middleware registration changed from `app/Http/Kernel.php` to `bootstrap/app.php`:
 
 ```php
 ->withMiddleware(function (Middleware $middleware): void {
@@ -122,7 +123,6 @@ I used route model binding to automatically inject the models into controller me
 
 ## Blade Views
 
-I created a view structure with Bootstrap styling:
 
 **Layout Structure:**
 - `posts/index.blade.php` – Post listing with edit/delete links
@@ -130,6 +130,8 @@ I created a view structure with Bootstrap styling:
 - `posts/edit.blade.php` – Post editing form
 - Similar structure for categories
 - `errors/404.blade.php` – Custom 404 page
+
+The forms included category dropdowns for posts, proper CSRF protection, and validation error handling. I made sure to display the associated category name in the post listings as required.
 
 ## Challenges Faced
 
@@ -152,4 +154,6 @@ Several times I got "View not found" errors even when the files existed. Laravel
 Getting route model binding to work required adding the model bindings to the service provider and ensuring the route parameters matched the model names exactly.
 
 ## Conclusion
-The experience taught me valuable lessons about Laravel 12's new middleware system, the importance of consistent database column types for foreign keys, and proper MVC architecture. Working through the various challenges - from foreign key constraints to view caching issues - gave me a much deeper understanding of Laravel's internals.
+
+
+The experience taught me valuable lessons about Laravel framework, the importance of consistent database column types for foreign keys, and proper MVC architecture. Working through the various challenges - from foreign key constraints to view caching issues - gave me a much deeper understanding of Laravel's internals.
